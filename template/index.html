@@ -92,25 +92,101 @@
 	<script src="{% static 'vendor/select2/select2.min.js' %}"></script>
 <!--===============================================================================================-->
 	<script src="{% static 'vendor/countdowntime/moment.min.js' %}"></script>
-	<script src="{% static 'vendor/countdowntime/moment-timezone.min.js' %}"></script>
-	<script src="{% static 'vendor/countdowntime/moment-timezone-with-data.min.js' %}"></script>
-	<script src="{% static 'vendor/countdowntime/countdowntime.js' %}"></script>
-	<script>
-		$('.cd100').countdown100({
-			/*Set Endtime here*/
-			/*Endtime must be > current time*/
-			endtimeYear: 0,
-			endtimeMonth: 0,
-			endtimeDate: 35,
-			endtimeHours: 18,
-			endtimeMinutes: 0,
-			endtimeSeconds: 0,
-			timeZone: "" 
-			// ex:  timeZone: "America/New_York"
-			//go to " http://momentjs.com/timezone/ " to get timezone
+	<script type="text/javascript">
+		// Initialize slider
+		$('.simpleslide100').each(function(){
+			var delay = 7000;
+			var speed = 1000;
+			var itemSlide = $(this).find('.simpleslide100-item');
+			var now = itemSlide.index( $('.simpleslide100-item.active') );
+			var nextActive = 0;
+			
+			itemSlide.css({
+				'display': 'none',
+				'position': 'relative',
+				'animation-duration': '500ms',
+			});
+
+			itemSlide.eq(now).css({
+				'display': 'block',
+			});
+
+			setInterval(checkitem, delay);
+
+			function checkitem(){
+				nextActive = (now == itemSlide.length-1) ? 0 : now + 1;
+
+				itemSlide.eq(now).removeClass('active');
+
+				itemSlide.eq(nextActive).addClass('active');
+				itemSlide.eq(nextActive).css({
+					'display': 'block',
+					'opacity': '0',
+				});
+
+
+				itemSlide.eq(now).animate({
+					'opacity': '0',
+				}, speed, function(){
+					itemSlide.eq(now).css({'display': 'none'});
+				});
+
+				itemSlide.eq(nextActive).animate({
+					'opacity': '1',
+				}, speed);
+
+				now = nextActive;
+			}
+		});
+
+		// Initialize countdown timer with persistent end time
+		$(document).ready(function() {
+			// Set the date we're counting down to (7 days from now)
+			var countDownDate = localStorage.getItem('countDownDate');
+			
+			// If no stored date or more than 7 days have passed, set a new end date
+			if (!countDownDate || new Date(countDownDate) < new Date()) {
+				countDownDate = new Date();
+				countDownDate.setDate(countDownDate.getDate() + 7); // 7 days from now
+				localStorage.setItem('countDownDate', countDownDate);
+			}
+
+			// Update the count down every 1 second
+			var x = setInterval(function() {
+				// Get today's date and time
+				var now = new Date().getTime();
+				
+				// If countDownDate is a string, convert it to a Date object
+				var endDate = new Date(countDownDate);
+				
+				// Find the distance between now and the count down date
+				var distance = endDate - now;
+				
+				// Time calculations for days, hours, minutes and seconds
+				var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+				var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+				var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+				
+				// Display the result in the elements with id="*"
+				document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
+				document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
+				document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
+				document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
+				
+				// If the count down is finished, reset the timer
+				if (distance < 0) {
+					clearInterval(x);
+					document.getElementById("days").innerHTML = "00";
+					document.getElementById("hours").innerHTML = "00";
+					document.getElementById("minutes").innerHTML = "00";
+					document.getElementById("seconds").innerHTML = "00";
+				}
+			}, 1000);
 		});
 	</script>
-<!--===============================================================================================-->
+
+	<!--===============================================================================================-->
 	<script src="{% static 'vendor/tilt/tilt.jquery.min.js' %}"></script>
 	<script >
 		$('.js-tilt').tilt({
