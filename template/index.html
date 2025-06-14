@@ -245,23 +245,41 @@
 
 		// Initialize countdown timer with persistent end time
 		$(document).ready(function() {
-			// Set the date we're counting down to (7 days from now)
-			var countDownDate = localStorage.getItem('countDownDate');
-			
-			// If no stored date or more than 7 days have passed, set a new end date
-			if (!countDownDate || new Date(countDownDate) < new Date()) {
-				countDownDate = new Date();
-				countDownDate.setDate(countDownDate.getDate() + 7); // 7 days from now
-				localStorage.setItem('countDownDate', countDownDate);
+			// Function to initialize a new countdown (7 days from now)
+			function initializeNewCountdown() {
+				var newDate = new Date();
+				newDate.setDate(newDate.getDate() + 7);
+				localStorage.setItem('countDownDate', newDate.getTime());
+				return newDate;
+			}
+
+			// Get the stored countdown date
+			var storedDate = localStorage.getItem('countDownDate');
+			var endDate;
+
+			try {
+				// If no stored date, initialize a new one
+				if (!storedDate) {
+					endDate = initializeNewCountdown();
+				} else {
+					// Convert stored timestamp to date
+					endDate = new Date(parseInt(storedDate));
+					
+					// If the date is invalid or in the past, initialize a new one
+					if (isNaN(endDate.getTime()) || endDate < new Date()) {
+						endDate = initializeNewCountdown();
+					}
+				}
+			} catch (e) {
+				// If any error occurs, initialize a new countdown
+				console.error('Error initializing countdown:', e);
+				endDate = initializeNewCountdown();
 			}
 
 			// Update the count down every 1 second
 			var x = setInterval(function() {
-				// Get today's date and time
+				// Get current date and time
 				var now = new Date().getTime();
-				
-				// If countDownDate is a string, convert it to a Date object
-				var endDate = new Date(countDownDate);
 				
 				// Find the distance between now and the count down date
 				var distance = endDate - now;
