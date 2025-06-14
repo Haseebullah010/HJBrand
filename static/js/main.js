@@ -62,6 +62,12 @@
         var itemSlide = $(this).find('.simpleslide100-item');
         var nowSlide = 0;
 
+        // Set background images from data-bg attributes
+        itemSlide.each(function() {
+            var bg = $(this).data('bg');
+            $(this).css('background-image', 'url(' + bg + ')');
+        });
+
         $(itemSlide).hide();
         $(itemSlide[nowSlide]).show();
         nowSlide++;

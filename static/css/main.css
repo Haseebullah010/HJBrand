@@ -176,6 +176,7 @@ Primary use:
   height: 100%;
   top: 0;
   left: 0;
+  overflow: hidden;
 }
 
 .simpleslide100-item {
@@ -185,6 +186,33 @@ Primary use:
   height: 100%;
   top: 0;
   left: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .simpleslide100 {
+    position: absolute;
+    height: 100vh;
+  }
+  
+  .simpleslide100-item {
+    background-size: cover;
+    background-position: center center;
+    background-attachment: scroll;
+  }
+}
+
+/* Fix for mobile viewport height issue */
+@supports (-webkit-touch-callout: none) {
+  .simpleslide100 {
+    height: -webkit-fill-available;
+  }
 }
 
 
