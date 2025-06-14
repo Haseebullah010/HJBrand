@@ -2,7 +2,7 @@
 {% load static %}
 <html lang="en">
 <head>
-	<title>Coming Soon 2</title>
+	<title>Coming Soon - HJBrand</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
@@ -139,47 +139,48 @@
 				📩 Drop your email to unlock <span style="font-weight: 600; color: #fff;">early access</span>
 			</p>
 
-			<div class="flex-w flex-c-m cd100 p-b-33">
-				<div class="flex-col-c-m size2 bor1 m-l-15 m-r-15 m-b-20">
-					<div class="dis-flex size1 p-b-47">
-			<div class="txt1 p-r-25">
-				<span class="lnr lnr-diamond"></span>
-			</div>
+			<div class="flex-w flex-c-m p-b-33">
+				<div class="dis-flex size1 p-b-47">
+					<div class="txt1 p-r-25">
+						<span class="lnr lnr-diamond"></span>
+					</div>
 
-			<div class="flex-col-m">
-				<div class="txt3 p-b-5">Limited Time Remaining</div>
+					<div class="flex-col-m">
+						<div class="txt3 p-b-5">Limited Time Remaining</div>
 
-				<div class="txt2 m-b-4">
-					<span id="days" class="m-r-10">07</span>
-					<span class="m-r-10">:</span>
-					<span id="hours" class="m-r-10">00</span>
-					<span class="m-r-10">:</span>
-					<span id="minutes" class="m-r-10">00</span>
-					<span class="m-r-10">:</span>
-					<span id="seconds">00</span>
+						<div class="txt2 m-b-4">
+							<span id="days" class="m-r-10">07</span>
+							<span class="m-r-10">:</span>
+							<span id="hours" class="m-r-10">00</span>
+							<span class="m-r-10">:</span>
+							<span id="minutes" class="m-r-10">00</span>
+							<span class="m-r-10">:</span>
+							<span id="seconds">00</span>
+						</div>
+
+						<div class="txt4">
+							<span class="m-r-20">Days</span>
+							<span class="m-r-20">Hours</span>
+							<span class="m-r-20">Minutes</span>
+							<span>Seconds</span>
+						</div>
+					</div>
 				</div>
 
-				<div class="txt4">
-					<span class="m-r-20">Days</span>
-					<span class="m-r-20">Hours</span>
-					<span class="m-r-20">Minutes</span>
-					<span>Seconds</span>
+				<form id="subscribe-form" class="w-full flex-w flex-c-m validate-form" method="post" action="{% url 'subscriptions:subscribe' %}">
+					{% csrf_token %}
+					<div class="wrap-input100 validate-input where1">
+						{{ form.email }}
+						<span class="focus-input100"></span>
+						<div class="error-message" style="color: #fff; margin-top: 5px; display: none;"></div>
+					</div>
+					<button type="submit" class="flex-c-m size3 s2-txt3 how-btn1 trans-04 where1">
+						Subscribe
+					</button>
+				</form>
+				<div id="success-message" class="m-t-20" style="color: #fff; text-align: center; display: none;">
+					Thank you for subscribing! We'll be in touch soon.
 				</div>
-			</div>
-		</div>		<form id="subscribe-form" class="w-full flex-w flex-c-m validate-form" method="post" action="{% url 'subscriptions:subscribe' %}">
-				{% csrf_token %}
-				<div class="wrap-input100 validate-input where1">
-					{{ form.email }}
-					<span class="focus-input100"></span>
-					<div class="error-message" style="color: #fff; margin-top: 5px; display: none;"></div>
-				</div>
-				<button type="submit" class="flex-c-m size3 s2-txt3 how-btn1 trans-04 where1">
-					Subscribe
-				</button>
-			</form>
-			<div id="success-message" class="m-t-20" style="color: #fff; text-align: center; display: none;">
-				Thank you for subscribing! We'll be in touch soon.
-			</div>
 		</div>
 	</div>
 
@@ -195,8 +196,7 @@
 <!--===============================================================================================-->
 	<script src="{% static 'vendor/select2/select2.min.js' %}"></script>
 <!--===============================================================================================-->
-	<script src="{% static 'vendor/countdowntime/moment.min.js' %}"></script>
-	<script type="text/javascript">
+	<script>
 		// Initialize slider
 		$('.simpleslide100').each(function(){
 			var delay = 7000;
@@ -205,6 +205,11 @@
 			var now = itemSlide.index( $('.simpleslide100-item.active') );
 			var nextActive = 0;
 			
+			// Set background images from data attributes
+			itemSlide.each(function() {
+				$(this).css('background-image', 'url(' + $(this).data('bg') + ')');
+			});
+
 			itemSlide.css({
 				'display': 'none',
 				'position': 'relative',
@@ -213,7 +218,8 @@
 
 			itemSlide.eq(now).css({
 				'display': 'block',
-			});
+				'opacity': '1'
+			}).addClass('active');
 
 			setInterval(checkitem, delay);
 
@@ -227,7 +233,6 @@
 					'display': 'block',
 					'opacity': '0',
 				});
-
 
 				itemSlide.eq(now).animate({
 					'opacity': '0',
@@ -278,23 +283,6 @@
 					document.getElementById("seconds").innerHTML = "00";
 				}
 			}, 1000);
-		});
-	</script>
-
-	<!--===============================================================================================-->
-	<script src="{% static 'vendor/tilt/tilt.jquery.min.js' %}"></script>
-	<script >
-		$('.js-tilt').tilt({
-			scale: 1.1
-		})
-	</script>
-<!--===============================================================================================-->
-	<script>
-		$(document).ready(function() {
-			// Set background images from data attributes
-			$('[data-bg]').each(function() {
-				$(this).css('background-image', 'url(' + $(this).data('bg') + ')');
-			});
 
 			// Handle subscription form submission
 			$('#subscribe-form').on('submit', function(e) {
@@ -331,6 +319,14 @@
 			});
 		});
 	</script>
+<!--===============================================================================================-->
+	<script src="{% static 'vendor/tilt/tilt.jquery.min.js' %}"></script>
+	<script>
+		$('.js-tilt').tilt({
+			scale: 1.1
+		});
+	</script>
+<!--===============================================================================================-->
 	<script src="{% static 'js/main.js' %}"></script>
 
 </body>
